@@ -116,15 +116,15 @@ std::bitset<64> blackKing{
 std::vector<char> board;
 
 std::bitset<64> whiteOccupiedSpaces;
+std::bitset<64> blackOccupiedSpaces;
 
 //board.assign(64, '-');
 
 void initBoard() {
-	board.assign(64, '-');
-	
+	board.assign(64, '-');	
 }
 
-void printPieces() {
+void placePieces() {
 	int i;
 	for (i = 0; i < whitePawns.size(); ++i) {
 		if (whitePawns[i] == 1) {
@@ -187,9 +187,22 @@ void printPieces() {
 	}
 }
 
-static std::bitset<64> generateWhiteOccupiedSpaces() {
+static void generateWhiteOccupiedSpaces() {
+	whiteOccupiedSpaces = whitePawns | whiteRooks | whiteKnights | whiteBishops | whiteQueen | whiteKing;
+}
 
+static void generateBlackOccupiedSpaces() {
+	blackOccupiedSpaces = blackPawns | blackRooks | blackKnights | blackBishops | blackQueen | blackKing;
+}
 
+void generateLegalMoves() {
+	
+}
+
+int aNotationToBit(std::string aNotation) {
+	int bitNum = int(tolower(aNotation[0])) - 97;
+	bitNum = bitNum + ( (aNotation[1] - 49) * 8);
+	return bitNum;
 }
 
 void printBoard() {
@@ -208,10 +221,9 @@ int main() {
 	//std::bitset<64> whitePawns{"0000000011111111000000000000000000000000000000000000000000000000"};
 
 	initBoard();
-	printPieces();
+	placePieces();
 	printBoard();
-
-	//std::cout << whitePawns;
+	generateBlackOccupiedSpaces();
 
 	return 0;
 }
