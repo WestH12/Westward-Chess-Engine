@@ -117,11 +117,18 @@ std::vector<char> board;
 
 std::bitset<64> whiteOccupiedSpaces;
 std::bitset<64> blackOccupiedSpaces;
+std::bitset<64> legalMoves;
+
+std::list <int> rightEdge{ 7, 15, 23, 31, 39, 47, 55, 63 };
+std::list <int> leftEdge{ 0, 8, 16, 24, 32, 40, 48, 56 };
+
+bool playerColor = true; //Will treat true as white and false as black
 
 //board.assign(64, '-');
 
 void initBoard() {
 	board.assign(64, '-');	
+	
 }
 
 void placePieces() {
@@ -195,8 +202,49 @@ static void generateBlackOccupiedSpaces() {
 	blackOccupiedSpaces = blackPawns | blackRooks | blackKnights | blackBishops | blackQueen | blackKing;
 }
 
-void generateLegalMoves() {
+static std::list<int> generateDiagonalMoves(int currentSpace) {
+	bool runCondition = true;
+	std::list<int> moves;
+	while (runCondition) { //Generates right diagonal moves
+		if ( std::find(rightEdge.begin(), rightEdge.end(), currentSpace) != rightEdge.end()) {
+			break;
+		}
+		if (blackOccupiedSpaces[currentSpace] == 1) {
+			moves.push_back(currentSpace);
+			break;
+		}
+		if (whiteOccupiedSpaces[currentSpace] == 1) {
+			break;
+		}
+		moves.push_back(currentSpace);
+		currentSpace += 9;
+	}
+}
+
+void generateLegalMoves(bool playerColor) {
+	std::bitset<64> temp;
+	int i;
+	int space;
 	
+
+	for (i = 0; i < 64; ++i) {
+		if (whiteBishops[i] == 1) {
+			space = i;
+			while ((space >= 0) || (space <= 64)) {
+				space += 9;
+				
+				if (blackOccupiedSpaces[space] == 1) {
+					break;
+				}
+				temp[space] = 1;
+				
+			}
+		}
+	}
+}
+
+void printMoveDirections() {
+	std::cout << "Please enter your movement directions: (Ie \"c4 to c5\") " << std::endl;
 }
 
 int aNotationToBit(std::string aNotation) {
@@ -223,7 +271,8 @@ int main() {
 	initBoard();
 	placePieces();
 	printBoard();
-	generateBlackOccupiedSpaces();
+	
+
 
 	return 0;
 }
