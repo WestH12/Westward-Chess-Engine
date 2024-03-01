@@ -242,7 +242,6 @@ static std::bitset<64> generateDiagonalMoves(int origSpace) {
 			currentSpace = currentSpace + incrementNum[i];
 		}
 	}
-	return moves;
 }
 
 void generateLegalMoves(bool playerColor) {
