@@ -122,6 +122,7 @@ std::bitset<64> legalMoves;
 std::list <int> rightEdge{ 7, 15, 23, 31, 39, 47, 55, 63 };
 std::list <int> leftEdge{ 0, 8, 16, 24, 32, 40, 48, 56 };
 std::list<int> topEdge{ 56, 57, 58, 59, 60, 61, 62, 63 };
+std::list<int> bottomEdge{0, 1, 2, 3, 4, 5, 6, 7};
 
 bool playerColor = true; //Will treat true as white and false as black
 
@@ -129,7 +130,6 @@ bool playerColor = true; //Will treat true as white and false as black
 
 void initBoard() {
 	board.assign(64, '-');	
-	
 }
 
 void placePieces() {
@@ -213,12 +213,15 @@ static std::bitset<64> generateDiagonalMoves(int origSpace) {
 
 		currentSpace = currentSpace + incrementNum[i];
 
-		while (true) { //Generates right diagonal moves
+		while (true) { 
 			if ((currentSpace <= 0) || (currentSpace >= 63)) {
 				break;
 			}
 			if (blackOccupiedSpaces[currentSpace] == 1) {
 				moves[currentSpace] = 1;
+				break;
+			}
+			if (whiteOccupiedSpaces[currentSpace] == 1) {
 				break;
 			}
 			if (std::find(leftEdge.begin(), leftEdge.end(), currentSpace) != leftEdge.end()) {
@@ -229,41 +232,119 @@ static std::bitset<64> generateDiagonalMoves(int origSpace) {
 				moves[currentSpace] = 1;
 				break;
 			}
-			if (whiteOccupiedSpaces[currentSpace] == 1) {
-				std::cout << "Hi white" << std::endl;
-				break;
-			}
 			if (std::find(topEdge.begin(), topEdge.end(), currentSpace) != topEdge.end()) {
 				moves[currentSpace] = 1;
-				std::cout << "Hi top" << std::endl;
 				break;
 			}
 			moves[currentSpace] = 1;
 			currentSpace = currentSpace + incrementNum[i];
 		}
 	}
+	return moves;
 }
 
-void generateLegalMoves(bool playerColor) {
-	std::bitset<64> temp;
-	int i;
-	int space;
-	
+static std::bitset<64> generateVerticalMoves(int origSpace) {
+	std::bitset<64> moves;
+	std::vector<int> incrementNumber{8, -8};
+	int currentSpace;
 
-	for (i = 0; i < 64; ++i) {
-		if (whiteBishops[i] == 1) {
-			space = i;
-			while ((space >= 0) || (space <= 64)) {
-				space -= 9;
-				
-				if (blackOccupiedSpaces[space] == 1) {
-					break;
-				}
-				temp[space] = 1;
-				
+	for (int i = 0; i < incrementNumber.size(); ++i) {
+		currentSpace = origSpace;
+
+		currentSpace = currentSpace + incrementNumber[i];
+		while (true) {
+			if ((currentSpace <= 0) || (currentSpace >= 63)) {
+				break;
 			}
+			if (blackOccupiedSpaces[currentSpace] == 1) {
+				moves[currentSpace] = 1;
+				break;
+			}
+			if (whiteOccupiedSpaces[currentSpace] == 1) {
+				break;
+			}
+			if (std::find(topEdge.begin(), topEdge.end(), currentSpace) != topEdge.end()) {
+				moves[currentSpace] = 1;
+				break;
+			}
+			if (std::find(bottomEdge.begin(), bottomEdge.end(), currentSpace) != bottomEdge.end()) {
+				moves[currentSpace] = 1;
+				break;
+			}
+			moves[currentSpace] = 1;
+			currentSpace = currentSpace + incrementNumber[i];
 		}
 	}
+	return moves;
+}
+
+std::bitset<64> generateHorizontalMoves(int origSpace) {
+	std::bitset<64> moves;
+	std::vector<int> incrementNumber{1, -1};
+	int currentSpace;
+
+	for (int i = 0; i < incrementNumber.size(); ++i) {
+		currentSpace = origSpace;
+
+		currentSpace = currentSpace + incrementNumber[i];
+		while (true) {
+			if ((currentSpace <= 0) || (currentSpace >= 63)) {
+				break;
+			}
+			if (blackOccupiedSpaces[currentSpace] == 1) {
+				moves[currentSpace] = 1;
+				break;
+			}
+			if (whiteOccupiedSpaces[currentSpace] == 1) {
+				std::cout << "Hi white" << std::endl;
+				break;
+			}
+			if (std::find(leftEdge.begin(), leftEdge.end(), currentSpace) != leftEdge.end()) {
+				moves[currentSpace] = 1;
+				break;
+			}
+			if (std::find(rightEdge.begin(), rightEdge.end(), currentSpace) != rightEdge.end()) {
+				moves[currentSpace] = 1;
+				break;
+			}
+			moves[currentSpace] = 1;
+			currentSpace = currentSpace + incrementNumber[i];
+		}
+	}
+	return moves;
+}
+
+std::bitset<64> generateKnightMoves(int origSpace) {
+	std::bitset<64> moves;
+	std::vector<int> incrementNumber{15, -15, 17, -17, 10, -6, 6, -10};
+	std::vector<int> leftKnightPadding{56,57,48,49,40,41,32,33,24,25,16,17,8,9,0,1};
+	int currentSpace;
+	int i;
+
+	currentSpace = origSpace;
+	
+	if (std::find(leftKnightPadding.begin(), leftKnightPadding.end(), origSpace) == leftKnightPadding.end()) {
+		for (i = 6; i < incrementNumber.size(); ++i) {
+			currentSpace = origSpace;
+			currentSpace = currentSpace + incrementNumber[i];
+			if (blackOccupiedSpaces[currentSpace] == 1) {
+				moves[currentSpace] = 1;
+				break;
+			}
+			if (whiteOccupiedSpaces[currentSpace] == 1) {
+				break;
+			}
+			moves[currentSpace] = 1;
+		}
+	}
+	return moves;
+}
+
+std::bitset<64> generateLegalMoves(int origSpace) {
+	std::bitset<64> temp;
+	
+	temp = generateDiagonalMoves(origSpace) | generateVerticalMoves(origSpace) | generateHorizontalMoves(origSpace);
+	return temp;
 }
 
 void printMoveDirections() {
@@ -289,8 +370,6 @@ void printBoard() {
 
 int main() {
 
-	//std::bitset<64> whitePawns{"0000000011111111000000000000000000000000000000000000000000000000"};
-
 	initBoard();
 	placePieces();
 	printBoard();
@@ -298,8 +377,11 @@ int main() {
 	generateBlackOccupiedSpaces();
 
 	
-	std::bitset<64> moves = generateDiagonalMoves(11);
+	std::bitset<64> moves = generateKnightMoves(25);
+
+	moves[25] = 1;
 	
+
 	std::cout << moves << std::endl;
 
 
