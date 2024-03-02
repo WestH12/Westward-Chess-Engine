@@ -317,53 +317,104 @@ std::bitset<64> generateHorizontalMoves(int origSpace) {
 std::bitset<64> generateKnightMoves(int origSpace) {
 	std::bitset<64> moves;
 	std::vector<int> incrementNumber{15, 17, -15, -17, 10, -6, 6, -10};
-	std::vector<int> leftKnightPadding{56,57,48,49,40,41,32,33,24,25,16,17,8,9,0,1};
-	std::vector<int> rightKnightPadding{62, 63, 54, 55, 46, 47, 38, 39, 30, 31, 22, 23, 14, 15, 6, 7};
-	std::vector<int> topKnightPadding{48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63};
-	std::vector<int> bottomKnightPadding{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
+	std::vector<int> leftKnightPadding{57, 49, 41, 33, 25, 17, 9, 1};
+	std::vector<int> rightKnightPadding{62, 54, 46, 38, 30, 22, 14, 6};
 	int currentSpace;
 	int i;
 
-	currentSpace = origSpace;
-	
-	if (std::find(leftKnightPadding.begin(), leftKnightPadding.end(), origSpace) == leftKnightPadding.end()) {
-		for (i = 6; i < incrementNumber.size(); ++i) {
+	//Checking to see if knight will go off left side of board if it moves two spaces to the left
+	if (std::find(leftKnightPadding.begin(), leftKnightPadding.end(), origSpace) != leftKnightPadding.end()) {
+		for (i = 0; i < 6; ++i) {
 			currentSpace = origSpace;
 			currentSpace = currentSpace + incrementNumber[i];
-			if (blackOccupiedSpaces[currentSpace] == 1) {
-				moves[currentSpace] = 1;
-				break;
+			if ((currentSpace <= -1) || (currentSpace >= 64)) {
+				continue;
 			}
-			if (whiteOccupiedSpaces[currentSpace] == 1) {
-				break;
+			else if (blackOccupiedSpaces[currentSpace] == 1) {
+				moves[currentSpace] = 1;
+				continue;
+			}
+			else if (whiteOccupiedSpaces[currentSpace] == 1) {
+				continue;
 			}
 			moves[currentSpace] = 1;
 		}
 	}
-	if (std::find(rightKnightPadding.begin(), rightKnightPadding.end(), origSpace) == rightKnightPadding.end()) {
-		for (i = 4; i < 6; ++i) {
+	else if (std::find(rightKnightPadding.begin(), rightKnightPadding.end(), origSpace) != rightKnightPadding.end()) {
+		//Checking to see if knight will go off left side of board if it moves two spaces to the right
+		for (i = 0; i < incrementNumber.size(); ++i) {
+			if ((i == 4) || (i == 5)) {
+				continue;
+			}
 			currentSpace = origSpace;
 			currentSpace = currentSpace + incrementNumber[i];
-			if (blackOccupiedSpaces[currentSpace] == 1) {
-				moves[currentSpace] = 1;
-				break;
+			if ((currentSpace <= -1) || (currentSpace >= 64)) {
+				continue;
 			}
-			if (whiteOccupiedSpaces[currentSpace] == 1) {
-				break;
+			else if (blackOccupiedSpaces[currentSpace] == 1) {
+				moves[currentSpace] = 1;
+				continue;
+			}
+			else if (whiteOccupiedSpaces[currentSpace] == 1) {
+				continue;
 			}
 			moves[currentSpace] = 1;
 		}
 	}
-	if (std::find(topKnightPadding.begin(), topKnightPadding.end(), origSpace) == topKnightPadding.end()) {
-		for (i = 6; i < incrementNumber.size(); ++i) {
+	else if (std::find(leftEdge.begin(), leftEdge.end(), origSpace) != leftEdge.end()) {//Checking to see if knight will go off left side of board when going up two and left one
+		for (i = 1; i < 6; ++i) {
+			if ( (i == 3)) {
+				continue;
+			}
 			currentSpace = origSpace;
 			currentSpace = currentSpace + incrementNumber[i];
-			if (blackOccupiedSpaces[currentSpace] == 1) {
-				moves[currentSpace] = 1;
-				break;
+			if ((currentSpace <= -1) || (currentSpace >= 64)) {
+				continue;
 			}
-			if (whiteOccupiedSpaces[currentSpace] == 1) {
-				break;
+			else if (blackOccupiedSpaces[currentSpace] == 1) {
+				moves[currentSpace] = 1;
+				continue;
+			}
+			else if (whiteOccupiedSpaces[currentSpace] == 1) {
+				continue;
+			}
+			moves[currentSpace] = 1;
+		}
+	}
+	else if (std::find(rightEdge.begin(), rightEdge.end(), origSpace) != rightEdge.end()) {//Checking to see if knight will go off left side of board when going up two and right one
+		for (i = 0; i < incrementNumber.size(); ++i) {
+			if ( (i == 1) || (i == 2) || (i == 4) || (i == 5) ) {
+				continue;
+			}
+			currentSpace = origSpace;
+			currentSpace = currentSpace + incrementNumber[i];
+			if ((currentSpace <= -1) || (currentSpace >= 64)) {
+				continue;
+			}
+			else if (blackOccupiedSpaces[currentSpace] == 1) {
+				moves[currentSpace] = 1;
+				continue;
+			}
+			else if (whiteOccupiedSpaces[currentSpace] == 1) {
+				continue;
+			}
+			moves[currentSpace] = 1;
+		}
+	}
+	else {
+		//If knight is not near any of the border of the board then this else statement runs for all possible movement directions for the knight
+		for (i = 0; i < incrementNumber.size(); ++i) {
+			currentSpace = origSpace;
+			currentSpace = currentSpace + incrementNumber[i];
+			if ((currentSpace <= -1) || (currentSpace >= 64)) {
+				continue;
+			}
+			else if (whiteOccupiedSpaces[currentSpace] == 1) {
+				continue;
+			}
+			else if (blackOccupiedSpaces[currentSpace] == 1) {
+				moves[currentSpace] = 1;
+				continue;
 			}
 			moves[currentSpace] = 1;
 		}
@@ -407,15 +458,11 @@ int main() {
 	generateWhiteOccupiedSpaces();
 	generateBlackOccupiedSpaces();
 
-	
-	std::bitset<64> moves = generateKnightMoves(21);
+	int origSpace = 62;
 
-	moves[21] = 1;
-	
+	std::bitset<64> moves = generateKnightMoves(origSpace);
 
-	std::cout << moves << std::endl;
-
-
+	moves[origSpace] = 1;
 
 	int i;
 	for (i = 0; i < moves.size(); ++i) {
