@@ -296,7 +296,6 @@ std::bitset<64> generateHorizontalMoves(int origSpace) {
 				break;
 			}
 			if (whiteOccupiedSpaces[currentSpace] == 1) {
-				std::cout << "Hi white" << std::endl;
 				break;
 			}
 			if (std::find(leftEdge.begin(), leftEdge.end(), currentSpace) != leftEdge.end()) {
@@ -424,8 +423,8 @@ std::bitset<64> generateKnightMoves(int origSpace) {
 
 std::bitset<64> generatePawnMoves(int origSpace) {
 	std::bitset<64> moves;
-	std::vector<int> incrementNumber{7, 9, 8, 16};
-	std::vector<int> whiteStartingLine{8, 9, 10, 11, 12, 13, 14, 15};
+	std::vector<int> incrementNumber{7, 9, -8, -16};
+	std::vector<int> whiteStartingLine{48, 49, 50, 51, 52, 53, 54, 55};
 	bool startingSpace = false;
 	int currentSpace;
 
@@ -557,7 +556,7 @@ std::bitset<64> generateKingMoves(int origSpace) {
 	return moves;
 }
 
-std::bitset<64> generateLegalMoves(int origSpace) {
+std::bitset<64> generateLegalMoves() {
 	std::bitset<64> temp;
 	for (int i = 0; i < 64; ++i) {
 		if (whitePawns[i] == 1) {
@@ -576,7 +575,7 @@ std::bitset<64> generateLegalMoves(int origSpace) {
 			temp = temp | generateHorizontalMoves(i) | generateVerticalMoves(i) | generateDiagonalMoves(i);
 		}
 		else if (whiteKing[i] == 1) {
-			//temp = temp | generateKingMoves(i);
+			temp = temp | generateKingMoves(i);
 		}
 	}
 	return temp;
@@ -613,9 +612,9 @@ int main() {
 
 	int origSpace = 36;
 
-	std::bitset<64> moves = generateKingMoves(origSpace);
+	std::bitset<64> moves = generateLegalMoves();
 
-	moves[origSpace] = 1;
+	//moves[origSpace] = 1;
 
 	int i;
 	for (i = 0; i < moves.size(); ++i) {
