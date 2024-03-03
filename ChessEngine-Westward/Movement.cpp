@@ -11,12 +11,14 @@ std::bitset<64> whiteLegalMoves; //Will hold all legal moves for white
 std::bitset<64> blackLegalMoves; //Will hold all legal moves for black
 
 
-std::list <int> rightEdge{ 7, 15, 23, 31, 39, 47, 55, 63 };
-std::list <int> leftEdge{ 0, 8, 16, 24, 32, 40, 48, 56 };
+std::list<int> rightEdge{ 7, 15, 23, 31, 39, 47, 55, 63 };
+std::list<int> leftEdge{ 0, 8, 16, 24, 32, 40, 48, 56 };
+
+//Might not need top or bottom edge lists
 std::list<int> topEdge{ 56, 57, 58, 59, 60, 61, 62, 63 };
 std::list<int> bottomEdge{ 0, 1, 2, 3, 4, 5, 6, 7 };
 
-static void generateWhiteOccupiedSpaces() {
+ void Movement::generateWhiteOccupiedSpaces() {
 	whiteOccupiedSpaces = whitePawns | whiteRooks | whiteKnights | whiteBishops | whiteQueen | whiteKing;
 }
 
@@ -400,6 +402,10 @@ std::bitset<64> generateLegalMoves() {
 		}
 	}
 	return temp;
+}
+
+void printMoveDirections() {
+	std::cout << "Please enter your movement directions: (Ie \"c4 to c5\") " << std::endl;
 }
 
 void movePieces() {
