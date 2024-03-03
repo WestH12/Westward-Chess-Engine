@@ -494,11 +494,33 @@ std::bitset<64> generatePawnMoves(int origSpace) {
 	return moves;
 }
 
+std::bitset<64> generateKingMoves(int origSpace) {
+
+}
+
 std::bitset<64> generateLegalMoves(int origSpace) {
 	std::bitset<64> temp;
+	for (int i = 0; i < 64; ++i) {
+		if (whitePawns[i] == 1) {
+			temp = temp | generatePawnMoves(i);
+		}
+		else if (whiteKnights[i] == 1) {
+			temp = temp | generateKnightMoves(i);
+		}
+		else if (whiteBishops[i] == 1) {
+			temp = temp | generateDiagonalMoves(i);
+		}
+		else if (whiteRooks[i] == 1) {
+			temp = temp | generateHorizontalMoves(i) | generateVerticalMoves(i);
+		}
+		else if (whiteQueen[i] == 1) {
+			temp = temp | generateHorizontalMoves(i) | generateVerticalMoves(i) | generateDiagonalMoves(i);
+		}
+		else if (whiteKing[i] == 1) {
+			//temp = temp | generateKingMoves(i);
+		}
+	}
 	
-	temp = generateDiagonalMoves(origSpace) | generateVerticalMoves(origSpace) | generateHorizontalMoves(origSpace);
-	return temp;
 }
 
 void printMoveDirections() {
