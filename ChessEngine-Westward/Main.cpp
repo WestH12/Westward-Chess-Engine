@@ -1,5 +1,7 @@
 #include "Board.h"
 #include <iostream>
+#include <string>
+#include <sstream>
 #include <bitset>
 #include <cassert>
 #include <list>
@@ -581,6 +583,20 @@ std::bitset<64> generateLegalMoves() {
 	return temp;
 }
 
+void movePieces() {
+	std::string inputLine;
+	std::string startingSpace;
+	std::string targetSpace;
+
+	//printMoveDirections();
+	std::getline(std::cin, inputLine);
+	startingSpace = inputLine.substr(0, 2);
+	targetSpace = inputLine.substr(6, 2);
+
+	std::cout << startingSpace << " " << targetSpace;
+
+}
+
 void printMoveDirections() {
 	std::cout << "Please enter your movement directions: (Ie \"c4 to c5\") " << std::endl;
 }
@@ -610,19 +626,7 @@ int main() {
 	generateWhiteOccupiedSpaces();
 	generateBlackOccupiedSpaces();
 
-	int origSpace = 36;
-
-	std::bitset<64> moves = generateLegalMoves();
-
-	//moves[origSpace] = 1;
-
-	int i;
-	for (i = 0; i < moves.size(); ++i) {
-		std::cout << moves[i];
-		if ((i + 1) % 8 == 0) {
-			std::cout << std::endl;
-		}
-	}
+	movePieces();
 
 	return 0;
 }
