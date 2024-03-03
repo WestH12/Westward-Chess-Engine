@@ -495,7 +495,66 @@ std::bitset<64> generatePawnMoves(int origSpace) {
 }
 
 std::bitset<64> generateKingMoves(int origSpace) {
+	std::bitset<64> moves;
+	int currentSpace;
+	std::vector<int> incrementNumber{-9, -1, 7, 8, -8, 9, 1, -7 };
+	int i;
 
+	if (std::find(leftEdge.begin(), leftEdge.end(), origSpace) != leftEdge.end()) {
+		for (i = 3; i < incrementNumber.size(); ++i) {
+			currentSpace = origSpace + incrementNumber[i];
+			if ((currentSpace <= -1) || (currentSpace >= 64)) {
+				continue;
+			}
+			else if (blackOccupiedSpaces[currentSpace] == 1) {
+				moves[currentSpace] = 1;
+			}
+			else if (whiteOccupiedSpaces[currentSpace] == 1) {
+				continue;
+			}
+			/*else if (isSpaceUnderAttack(currentSpace)) { #TO BE IMPLEMENTED
+				continue;
+			}*/
+			moves[currentSpace] = 1;
+		}
+	}
+	else if (std::find(rightEdge.begin(), rightEdge.end(), origSpace) != rightEdge.end()) {
+		for (i = 0; i < 5; ++i) {
+			currentSpace = origSpace + incrementNumber[i];
+			if ((currentSpace <= -1) || (currentSpace >= 64)) {
+				continue;
+			}
+			else if (blackOccupiedSpaces[currentSpace] == 1) {
+				moves[currentSpace] = 1;
+			}
+			else if (whiteOccupiedSpaces[currentSpace] == 1) {
+				continue;
+			}
+			/*else if (isSpaceUnderAttack(currentSpace)) { #TO BE IMPLEMENTED
+				continue;
+			}*/
+			moves[currentSpace] = 1;
+		}
+	}
+	else {
+		for (i = 0; i < incrementNumber.size(); ++i) {
+			currentSpace = origSpace + incrementNumber[i];
+			if ((currentSpace <= -1) || (currentSpace >= 64)) {
+				continue;
+			}
+			else if (blackOccupiedSpaces[currentSpace] == 1) {
+				moves[currentSpace] = 1;
+			}
+			else if (whiteOccupiedSpaces[currentSpace] == 1) {
+				continue;
+			}
+			/*else if (isSpaceUnderAttack(currentSpace)) { #TO BE IMPLEMENTED
+				continue;
+			}*/
+			moves[currentSpace] = 1;
+		}
+	}
+	return moves;
 }
 
 std::bitset<64> generateLegalMoves(int origSpace) {
@@ -520,7 +579,7 @@ std::bitset<64> generateLegalMoves(int origSpace) {
 			//temp = temp | generateKingMoves(i);
 		}
 	}
-	
+	return temp;
 }
 
 void printMoveDirections() {
@@ -552,9 +611,9 @@ int main() {
 	generateWhiteOccupiedSpaces();
 	generateBlackOccupiedSpaces();
 
-	int origSpace = 0;
+	int origSpace = 36;
 
-	std::bitset<64> moves = generatePawnMoves(origSpace);
+	std::bitset<64> moves = generateKingMoves(origSpace);
 
 	moves[origSpace] = 1;
 
