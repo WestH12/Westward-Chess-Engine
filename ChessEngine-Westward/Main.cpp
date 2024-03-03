@@ -429,7 +429,7 @@ std::bitset<64> generatePawnMoves(int origSpace) {
 	bool startingSpace = false;
 	int currentSpace;
 
-	if (std::find(whiteStartingLine.begin(), whiteStartingLine.end(), origSpace) == whiteStartingLine.end()) { //Checks to see if pawn is on starting space and if so then checks for double movement out
+	if (std::find(whiteStartingLine.begin(), whiteStartingLine.end(), origSpace) != whiteStartingLine.end()) { //Checks to see if pawn is on starting space and if so then checks for double movement out
 		for (int i = 2; i < incrementNumber.size(); ++i) {
 			currentSpace = origSpace;
 			currentSpace = currentSpace + incrementNumber[i];
@@ -447,10 +447,8 @@ std::bitset<64> generatePawnMoves(int origSpace) {
 	else {
 		currentSpace = origSpace + incrementNumber[2];
 		if ((currentSpace <= -1) || (currentSpace >= 64)) {
-			
 		}
 		else if (blackOccupiedSpaces[currentSpace] == 1) {
-			moves[currentSpace] = 1;
 		}
 		else if (whiteOccupiedSpaces[currentSpace] == 1) {
 		}
@@ -458,9 +456,42 @@ std::bitset<64> generatePawnMoves(int origSpace) {
 	}
 	
 	if (std::find(leftEdge.begin(), leftEdge.end(), origSpace) != leftEdge.end()) {
+		//Prevents checking left diagonal pawn attack
+		currentSpace = origSpace + incrementNumber[1];
+		if ((currentSpace <= -1) || (currentSpace >= 64)) { //Does not add move if space is off the top or bottom of the board
+		}
+		else if (blackOccupiedSpaces[currentSpace] == 1) { //Can only move diagonally if their is an opponent piece there
+			moves[currentSpace] = 1;
+		}
+		else if (whiteOccupiedSpaces[currentSpace] == 1) { //Does not add move if space if occupied by same color piece
+		}
 
 	}
-	
+	else if (std::find(rightEdge.begin(), rightEdge.end(), origSpace) != rightEdge.end()) {
+		//Prevents checking right diagonal pawn attack
+		currentSpace = origSpace + incrementNumber[0];
+		if ((currentSpace <= -1) || (currentSpace >= 64)) {
+		}
+		else if (blackOccupiedSpaces[currentSpace] == 1) {
+			moves[currentSpace] = 1;
+		}
+		else if (whiteOccupiedSpaces[currentSpace] == 1) {
+		}
+	}
+	else {
+		//Since left and right diagonal are not going off the board, then we check both diagonal attack directions
+		for (int i = 0; i < 2; ++i) {
+			currentSpace = origSpace + incrementNumber[i];
+			if ((currentSpace <= -1) || (currentSpace >= 64)) {
+			}
+			else if (blackOccupiedSpaces[currentSpace] == 1) {
+				moves[currentSpace] = 1;
+			}
+			else if (whiteOccupiedSpaces[currentSpace] == 1) {
+			}
+		}
+	}
+	return moves;
 }
 
 std::bitset<64> generateLegalMoves(int origSpace) {
@@ -499,9 +530,9 @@ int main() {
 	generateWhiteOccupiedSpaces();
 	generateBlackOccupiedSpaces();
 
-	int origSpace = 62;
+	int origSpace = 0;
 
-	std::bitset<64> moves = generateKnightMoves(origSpace);
+	std::bitset<64> moves = generatePawnMoves(origSpace);
 
 	moves[origSpace] = 1;
 
