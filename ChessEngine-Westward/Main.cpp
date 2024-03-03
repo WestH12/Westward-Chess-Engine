@@ -422,6 +422,47 @@ std::bitset<64> generateKnightMoves(int origSpace) {
 	return moves;
 }
 
+std::bitset<64> generatePawnMoves(int origSpace) {
+	std::bitset<64> moves;
+	std::vector<int> incrementNumber{7, 9, 8, 16};
+	std::vector<int> whiteStartingLine{8, 9, 10, 11, 12, 13, 14, 15};
+	bool startingSpace = false;
+	int currentSpace;
+
+	if (std::find(whiteStartingLine.begin(), whiteStartingLine.end(), origSpace) == whiteStartingLine.end()) { //Checks to see if pawn is on starting space and if so then checks for double movement out
+		for (int i = 2; i < incrementNumber.size(); ++i) {
+			currentSpace = origSpace;
+			currentSpace = currentSpace + incrementNumber[i];
+			if ((currentSpace <= -1) || (currentSpace >= 64)) {
+
+			}
+			else if (blackOccupiedSpaces[currentSpace] == 1) {
+				moves[currentSpace] = 1;
+			}
+			else if (whiteOccupiedSpaces[currentSpace] == 1) {
+			}
+			moves[currentSpace] = 1;
+		}
+	}
+	else {
+		currentSpace = origSpace + incrementNumber[2];
+		if ((currentSpace <= -1) || (currentSpace >= 64)) {
+			
+		}
+		else if (blackOccupiedSpaces[currentSpace] == 1) {
+			moves[currentSpace] = 1;
+		}
+		else if (whiteOccupiedSpaces[currentSpace] == 1) {
+		}
+		moves[currentSpace] = 1;
+	}
+	
+	if (std::find(leftEdge.begin(), leftEdge.end(), origSpace) != leftEdge.end()) {
+
+	}
+	
+}
+
 std::bitset<64> generateLegalMoves(int origSpace) {
 	std::bitset<64> temp;
 	
