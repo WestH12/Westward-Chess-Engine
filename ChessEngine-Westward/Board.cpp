@@ -2,8 +2,9 @@
 #include <bitset>
 #include <vector>
 #include <cassert>
+#include <iostream>
 
-std::bitset<64> whitePawns{
+std::bitset<64> Board::whitePawns{
 							"00000000"
 							"11111111"
 							"00000000"
@@ -12,6 +13,24 @@ std::bitset<64> whitePawns{
 							"00000000"
 							"00000000"
 							"00000000" };
+
+std::bitset<64> Board::getWhitePawns() {
+	return whitePawns;
+}
+
+void Board::movePawn(int origSpace, int newSpace) {
+	whitePawns[origSpace] = 0;
+	whitePawns[newSpace] = 1;
+}
+
+void Board::removePawn(int removalSpace) {
+	whitePawns[removalSpace] = 0;
+}
+
+std::bitset<64> Board::getWhiteRooks() {
+	return whiteRooks;
+}
+
 std::bitset<64> whiteRooks{
 							"10000001"
 							"00000000"
@@ -21,6 +40,9 @@ std::bitset<64> whiteRooks{
 							"00000000"
 							"00000000"
 							"00000000" };
+
+
+
 std::bitset<64> whiteKnights{
 							"01000010"
 							"00000000"
@@ -119,6 +141,9 @@ std::bitset<64> blackOccupiedSpaces;
 void initBoard() {
 	board.assign(64, '-');
 }
+
+
+
 
 void placePieces() {
 	int i;
