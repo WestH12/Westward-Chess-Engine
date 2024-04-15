@@ -1,4 +1,6 @@
 #include "Movement.h"
+#include "Board.h"
+#include "Board.cpp"
 #include <iostream>
 #include <string>
 #include <sstream>
@@ -6,6 +8,7 @@
 #include <cassert>
 #include <list>
 #include <vector>
+
 
 std::bitset<64> whiteLegalMoves; //Will hold all legal moves for white
 std::bitset<64> blackLegalMoves; //Will hold all legal moves for black
@@ -19,10 +22,10 @@ std::list<int> topEdge{ 56, 57, 58, 59, 60, 61, 62, 63 };
 std::list<int> bottomEdge{ 0, 1, 2, 3, 4, 5, 6, 7 };
 
  void Movement::generateWhiteOccupiedSpaces() {
-	whiteOccupiedSpaces = whitePawns | whiteRooks | whiteKnights | whiteBishops | whiteQueen | whiteKing;
+	whiteOccupiedSpaces = Board::getWhitePawns() | Board::getWhiteRooks() | Board::getWhiteKnights() | Board::getWhiteBishops() | Board:getWhiteQueen() | Board::getWhiteKing();
 }
 
-static void generateBlackOccupiedSpaces() {
+void Movement::generateBlackOccupiedSpaces() {
 	blackOccupiedSpaces = blackPawns | blackRooks | blackKnights | blackBishops | blackQueen | blackKing;
 }
 

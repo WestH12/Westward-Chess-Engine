@@ -14,13 +14,13 @@ bool playerColor = true; //Will treat true as white and false as black
 
 int main() {
 
-	initBoard();
-	placePieces();
-	printBoard();
-	generateWhiteOccupiedSpaces();
-	generateBlackOccupiedSpaces();
+	Board::initBoard();
+	Board::placePieces();
+	Board::printBoard();
+	Movement::generateWhiteOccupiedSpaces();
+	Movement::generateBlackOccupiedSpaces();
 
-	movePieces();
+	Movement::movePieces();
 
 	return 0;
 }

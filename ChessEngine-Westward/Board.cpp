@@ -27,11 +27,7 @@ void Board::removePawn(int removalSpace) {
 	whitePawns[removalSpace] = 0;
 }
 
-std::bitset<64> Board::getWhiteRooks() {
-	return whiteRooks;
-}
-
-std::bitset<64> whiteRooks{
+std::bitset<64> Board::whiteRooks{
 							"10000001"
 							"00000000"
 							"00000000"
@@ -41,7 +37,9 @@ std::bitset<64> whiteRooks{
 							"00000000"
 							"00000000" };
 
-
+std::bitset<64> Board::getWhiteRooks() {
+	return whiteRooks;
+}
 
 std::bitset<64> whiteKnights{
 							"01000010"
@@ -79,6 +77,7 @@ std::bitset<64> whiteKing{
 							"00000000"
 							"00000000"
 							"00000000" };
+
 std::bitset<64> blackPawns{
 							"00000000"
 							"00000000"
@@ -135,17 +134,31 @@ std::bitset<64> blackKing{
 							"00010000" };
 std::vector<char> board;
 
+void Board::movePawn(int origSpace, int newSpace) {
+	whitePawns[origSpace] = 0;
+	whitePawns[newSpace] = 1;
+}
+
+void Board::removePawn(int removalSpace) {
+	whitePawns[removalSpace] = 0;
+}
+
+void Board::moveRook(int origSpace, int newSpace) {
+	whiteRooks[origSpace] = 0;
+	whiteRooks[newSpace] = 1;
+}
+
 std::bitset<64> whiteOccupiedSpaces;
 std::bitset<64> blackOccupiedSpaces;
 
-void initBoard() {
+void Board::initBoard() {
 	board.assign(64, '-');
 }
 
 
 
 
-void placePieces() {
+void Board::placePieces() {
 	int i;
 	for (i = 0; i < whitePawns.size(); ++i) {
 		if (whitePawns[i] == 1) {
