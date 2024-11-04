@@ -583,29 +583,40 @@ std::bitset<64> generateLegalMoves() {
 	return temp;
 }
 
-void movePieces() {
-	std::string inputLine;
-	std::string startingSpace;
-	std::string targetSpace;
-
-	//printMoveDirections();
-	std::getline(std::cin, inputLine);
-	startingSpace = inputLine.substr(0, 2);
-	targetSpace = inputLine.substr(6, 2);
-
-	std::cout << startingSpace << " " << targetSpace;
-
-}
-
-void printMoveDirections() {
+static void printMoveDirections() {
 	std::cout << "Please enter your movement directions: (Ie \"c4 to c5\") " << std::endl;
 }
 
 int aNotationToBit(std::string aNotation) {
 	int bitNum = int(tolower(aNotation[0])) - 97;
-	bitNum = bitNum + ( (aNotation[1] - 49) * 8);
+	bitNum = bitNum + ((aNotation[1] - 49) * 8);
 	return bitNum;
 }
+
+void movePieces(std::string inputLine) {
+	//std::string inputLine;
+	std::string startingSpace;
+	std::string targetSpace;
+	int startingNum;
+	int targetNum;
+
+	printMoveDirections();
+	//std::getline(std::cin, inputLine);
+	
+	startingSpace = inputLine.substr(0, 2);
+	targetSpace = inputLine.substr(6, 2);
+
+	std::cout << startingSpace << " " << targetSpace;
+	startingNum = aNotationToBit(startingSpace);
+	targetNum = aNotationToBit(targetSpace);
+	char temp = board.at(startingNum);
+	board.at(targetNum) = temp;
+	board.at(startingNum) = '-';
+}
+
+
+
+
 
 void printBoard() {
 	int i;
@@ -626,7 +637,17 @@ int main() {
 	generateWhiteOccupiedSpaces();
 	generateBlackOccupiedSpaces();
 
-	movePieces();
+	while (true) {
+		printMoveDirections();
+		std::string input;
+		std::getline(std::cin, input);
+		if (input == "stop") {
+			break;
+		}
+		movePieces(input);
+		printBoard();
+	}
+	
 
 	return 0;
 }
